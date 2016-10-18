@@ -1,0 +1,23 @@
+<div class="content">
+    <div class="container alert alert-warning" " ng-show="vm.showMessage ">
+        Oops! There are no matches for <em>"{{vm.photoSearch}} "</em>.
+        Please try to change Your request
+    </div>
+
+    <div ng-hide="vm.loading || vm.showMessage" class="container paginator">
+        <ul class="pagination">
+            <li ng-repeat="page in vm.pageNav" ng-class="{active: page.disabled}"><a ui-sref="search({search_request: vm.req, page: page.number})" ng-click="vm.search(vm.photoSearch, page.number)">{{page.text}}</a></li>
+        </ul>
+        <p class="pages-of-pages">Page {{vm.page}} of {{vm.pages}}</p>
+    </div>
+
+    <div ng-show="vm.loading" class="text-center loading">
+        <img src="./img/loading_spinner.gif" style="height:50px;">
+    </div>
+    <div ng-hide="vm.loading || vm.showMessage" class="container well thumb-grid" ng-cloak>
+        
+        <div class="thumb" ng-repeat="photo in vm.photos" ng-click="vm.openPhoto($index)" ng-class="{highlight: $index === vm.currentIndex}">
+            <img ng-src="https://farm{{photo.farm}}.static.flickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_q.jpg">
+        </div>
+    </div>
+</div>
