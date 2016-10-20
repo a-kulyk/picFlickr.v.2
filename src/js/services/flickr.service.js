@@ -1,14 +1,24 @@
 export default class FlickrService {
-    constructor ($http, MyConfig, Paginator) {
+    constructor ($http, $stateParams, $location, MyConfig, Paginator) {
         'ngInject';
 
         this.Paginator = Paginator;
         this.MyConfig = MyConfig;
         this.$http = $http;
+        this.$location = $location;
+        this.$stateParams = $stateParams;
+        this.allPhotos = [];
+        this.availableSizes = [
+            {name: 'small', value: 'n'},
+            {name: 'medium', value: 'z'},
+            {name: 'large', value: 'c'},
+            {name: 'larger', value: 'b'}
+        ];
+        this.size = this.availableSizes[MyConfig.one];
     }
 
     search (request, page) {
-        console.log('service: ', page);
+        console.log(request);
         const params = {
             'api_key': this.MyConfig.API_KEY,
             'per_page': this.MyConfig.perPage,
@@ -16,30 +26,49 @@ export default class FlickrService {
             'privacy_filter': this.MyConfig.one,
             format: 'json',
             nojsoncallback: this.MyConfig.one,
-            text: request || 'top rated',
+            text: request,
             sort: 'relevance',
-            page: page,
+            page,
             method: 'flickr.photos.search'
         };
 
-        this.allPhotos = [];
-
-        return this.$http({ method: 'GET', url: this.MyConfig.base_url, params})
+        return this.$http({ method: 'GET', url: this.MyConfig.base_url, params })
             .then(res => {
                 this.allPhotos = res.data.photos.photo;
-                const currPage = res.data.photos.page;
-                const allPages = res.data.photos.pages;
-
-                this.pageNav = this.Paginator.paginate(currPage, allPages);
-
-                // return res.data;
+                this.currPage = res.data.photos.page;
+                this.allPages = res.data.photos.pages;
+                this.pageNav = this.Paginator.paginate(this.currPage, this.allPages);
             });
     }
 
     getPhotos () {
+        // if (this.allPhotos.length === 0) {
+        //     this.search(this.$stateParams.search_request, 1)
+        //         .then(() => {
+        //             return { photos: this.allPhotos };
+        //         });
+        //     return;
+        // }
         return {
             photos: this.allPhotos,
-            pageNav: this.pageNav
+            pageNav: this.pageNav,
+            currPage: this.currPage,
+            allPages: this.allPages
         };
+    }
+
+    getLink (index) {
+        const src = this.allPhotos[index];
+
+        return `https://farm${src.farm}.static.flickr.com/${src.server}/${src.id}_${src.secret}_${this.size.value}.jpg`;
+    }
+    getAvailableSizes () {
+        return this.availableSizes;
+    }
+    getSize () {
+        return this.size;
+    }
+    setSize (size) {
+        this.size = size;
     }
 }

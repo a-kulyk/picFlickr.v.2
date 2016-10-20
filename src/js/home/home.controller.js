@@ -1,28 +1,34 @@
 class HomeCtrl {
-    constructor ($state, $stateParams, $scope, $location, $anchorScroll, $log, Clipboard, MyConfig, FlickrService) {
+    constructor ($state, $stateParams, $location, $anchorScroll, MyConfig, FlickrService) {
         'ngInject';
 
         this.$state = $state;
-        this.$scope = $scope;
         this.$location = $location;
         this.$anchorScroll = $anchorScroll;
         this.FlickrService = FlickrService;
-        this.$log = $log;
-        this.Clipboard = Clipboard;
         this.MyConfig = MyConfig;
-        this.title = $state.current.title;
-        this.req = $stateParams.search_request;
+        this.req = $stateParams.search_request || MyConfig.defaultRequest;
         this.page = $stateParams.page || MyConfig.one;
+        this.currPage = FlickrService.getPhotos().currPage;
+        this.allPages = FlickrService.getPhotos().allPages;
         this.search(this.req, this.page);
     }
     search (req, page) {
+        this.loading = true;
         this.FlickrService.search(req, page)
             .then(() => {
+                this.loading = false;
                 const result = this.FlickrService.getPhotos();
-
+console.log(result);
                 Object.assign(this, result);
-                console.log(this.pageNav);
             });
+    }
+    openPhoto (index) {
+        this.currentPhotoId = this.photos[index].id;
+        this.$state.go('gallery', {'search_request': this.req, 'id': this.currentPhotoId});
+    }
+    goTop () {
+        this.$anchorScroll();
     }
 }
 

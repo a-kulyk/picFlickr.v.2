@@ -3,10 +3,11 @@ class AppHeaderCtrl {
         'ngInject';
 
         this._$state = $state;
+        this.MyConfig = MyConfig;
         this.appName = MyConfig.appName;
     }
     search (req) {
-        this._$state.go('search', {'search_request': req});
+        this._$state.go('search', {'search_request': req, 'page': this.MyConfig.one});
     }
 }
 
