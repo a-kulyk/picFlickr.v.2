@@ -8,28 +8,42 @@ class GalleryCtrl {
         this.Clipboard = Clipboard;
         this.MyConfig = MyConfig;
         this.currIndex = currentPhotoIndex;
+        this.fade = false;
         this.currPage = FlickrService.getPhotos().currPage;
         this.currentPhoto = FlickrService.getPhotos().photos[this.currIndex];
         this.availableSizes = FlickrService.getAvailableSizes();
         this.size = FlickrService.getSize();
-        this.openPhoto(currentPhotoIndex);
+        this.openPhoto();
     }
-    openPhoto (index) {
-        this.currentPhotoSrc = this.FlickrService.getLink(index);
+    openPhoto () {
+        this.currentPhotoSrc = this.FlickrService.getLink();
         // this.currentPhotoSrc = `https://farm${this.currPhoto.farm}.static.flickr.com/${this.currPhoto.server}/${this.currPhoto.id}_${this.currPhoto.secret}_z.jpg`;
     }
     next () {
         if (this.currIndex === this.FlickrService.getPhotos().photos.length - this.MyConfig.one)
             this.FlickrService.search(this.req, this.currPage + this.MyConfig.one)
                 .then(() => {
-                    const firstPhotoId = this.FlickrService.getPhotos().photos[this.MyConfig.zero].id;
+                    const firstPhoto = this.FlickrService.getPhotos().photos[this.MyConfig.zero];
 
-                    this.$state.go('gallery', {'search_request': this.req, 'id': firstPhotoId});
+                    this.fade = true;
+                    this.$state.go('gallery', {
+                        'search_request': this.req,
+                        'farm': firstPhoto.farm,
+                        'server': firstPhoto.server,
+                        'id': firstPhoto.id,
+                        'secret': firstPhoto.secret
+                    });
                 });
         else {
-            const nextPhotoId = this.FlickrService.getPhotos().photos[this.currIndex + this.MyConfig.one].id;
+            const nextPhoto = this.FlickrService.getPhotos().photos[this.currIndex + this.MyConfig.one];
 
-            this.$state.go('gallery', {'search_request': this.req, 'id': nextPhotoId});
+            this.$state.go('gallery', {
+                'search_request': this.req,
+                'farm': nextPhoto.farm,
+                'server': nextPhoto.server,
+                'id': nextPhoto.id,
+                'secret': nextPhoto.secret
+            });
         }
     }
     previous () {
@@ -37,14 +51,26 @@ class GalleryCtrl {
             if (this.currPage === this.MyConfig.one) return;
             this.FlickrService.search(this.req, this.currPage - this.MyConfig.one)
                 .then(() => {
-                    const lastPhotoId = this.FlickrService.getPhotos().photos[this.MyConfig.perPage - this.MyConfig.one].id;
+                    const lastPhoto = this.FlickrService.getPhotos().photos[this.MyConfig.perPage - this.MyConfig.one];
 
-                    this.$state.go('gallery', {'search_request': this.req, 'id': lastPhotoId});
+                    this.$state.go('gallery', {
+                        'search_request': this.req,
+                        'farm': lastPhoto.farm,
+                        'server': lastPhoto.server,
+                        'id': lastPhoto.id,
+                        'secret': lastPhoto.secret
+                    });
                 });
         } else {
-            const prevPhotoId = this.FlickrService.getPhotos().photos[this.currIndex - this.MyConfig.one].id;
+            const prevPhoto = this.FlickrService.getPhotos().photos[this.currIndex - this.MyConfig.one];
 
-            this.$state.go('gallery', {'search_request': this.req, 'id': prevPhotoId});
+            this.$state.go('gallery', {
+                'search_request': this.req,
+                'farm': prevPhoto.farm,
+                'server': prevPhoto.server,
+                'id': prevPhoto.id,
+                'secret': prevPhoto.secret
+            });
         }
     }
     copyLink () {

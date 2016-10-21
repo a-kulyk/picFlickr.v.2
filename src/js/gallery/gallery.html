@@ -1,8 +1,8 @@
-<div class="container-fluid text-center control-gallery" ng-cloack>
-    <div class="container">
+<div class="container-fluid text-center control-gallery" ng-cloack ng-style="{'height': vm.size.height}">
+    <div class="container" ng-style="{'height': vm.size.height}">
         <div id="myCarousel" class="carousel slide">
             <div class="carousel-inner" role="listbox">
-                <img ng-src="{{vm.currentPhotoSrc}}" ng-click="vm.next()" title="Next">
+                <img ng-src="{{vm.currentPhotoSrc}}" ng-click="vm.next()" title="Next" ng-style="{'height': vm.size.height}">
             </div>
         </div>
         <a class="left carousel-control" href="" role="button" ng-click="vm.previous()" title="Previous">
@@ -17,7 +17,7 @@
         
     </div>
 </div>
-<div class="container">
+<div class="container" ng-hide="vm.fade">
     <label for="sel1">Select size:</label>
     <select class="btn" id="sel1" ng-model='vm.size' ng-change="vm.onChange(vm.size)" ng-options="size.name for size in vm.availableSizes">
     </select>

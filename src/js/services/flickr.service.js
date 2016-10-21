@@ -9,15 +9,15 @@ export default class FlickrService {
         this.$stateParams = $stateParams;
         this.allPhotos = [];
         this.availableSizes = [
-            {name: 'small', value: 'n'},
-            {name: 'medium', value: 'z'},
-            {name: 'large', value: 'c'},
-            {name: 'larger', value: 'b'}
+            {name: 'small', value: 'n', height: '200px'},
+            {name: 'medium', value: 'z', height: '400px'},
+            {name: 'large', value: 'c', height: '600px'},
+            {name: 'larger', value: 'b', height: '800px'}
         ];
         this.size = this.availableSizes[MyConfig.one];
     }
 
-    search (request, page) {
+    search (request, page = this.MyConfig.one) {
         console.log(request);
         const params = {
             'api_key': this.MyConfig.API_KEY,
@@ -57,8 +57,8 @@ export default class FlickrService {
         };
     }
 
-    getLink (index) {
-        const src = this.allPhotos[index];
+    getLink () {
+        const src = this.$stateParams;
 
         return `https://farm${src.farm}.static.flickr.com/${src.server}/${src.id}_${src.secret}_${this.size.value}.jpg`;
     }

@@ -5,7 +5,7 @@ function GalleryConfig ($stateProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('gallery', {
-            url: '/gallery/:search_request/:id',
+            url: '/gallery/:search_request/:farm/:server/:id/:secret',
             controller: 'GalleryCtrl',
             controllerAs: 'vm',
             templateUrl: 'gallery/gallery.html',
@@ -14,9 +14,13 @@ function GalleryConfig ($stateProvider, $urlRouterProvider) {
         });
 
     // Resolving to get all photo's data
-    function currentPhotoIndex ($stateParams, FlickrService) {
-        // console.log('in GalleryConfig');
-        console.log(FlickrService.getPhotos().photos.findIndex(photo => photo.id === $stateParams.id));
+    function currentPhotoIndex ($stateParams, FlickrService, MyConfig) {
+        const index = FlickrService.getPhotos().photos.findIndex(photo => photo.id === $stateParams.id);
+        console.log('index', index);
+
+        if (index < MyConfig.zero)
+            FlickrService.search($stateParams.search_request)
+                .then(() => MyConfig.zero);
         return FlickrService.getPhotos().photos.findIndex(photo => photo.id === $stateParams.id);
     }
 }
