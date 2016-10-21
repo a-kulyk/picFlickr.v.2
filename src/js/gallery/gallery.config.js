@@ -16,11 +16,11 @@ function GalleryConfig ($stateProvider, $urlRouterProvider) {
     // Resolving to get all photo's data
     function currentPhotoIndex ($stateParams, FlickrService, MyConfig) {
         const index = FlickrService.getPhotos().photos.findIndex(photo => photo.id === $stateParams.id);
-        console.log('index', index);
 
-        if (index < MyConfig.zero)
-            FlickrService.search($stateParams.search_request)
-                .then(() => MyConfig.zero);
+        if (index < MyConfig.zero) {
+            FlickrService.search($stateParams.search_request);
+            return MyConfig.zero;
+        }
         return FlickrService.getPhotos().photos.findIndex(photo => photo.id === $stateParams.id);
     }
 }

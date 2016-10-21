@@ -17,9 +17,28 @@
         
     </div>
 </div>
-<div class="container" ng-hide="vm.fade">
-    <label for="sel1">Select size:</label>
-    <select class="btn" id="sel1" ng-model='vm.size' ng-change="vm.onChange(vm.size)" ng-options="size.name for size in vm.availableSizes">
-    </select>
-    <button class="btn btn-primary btn-sm" ng-click="vm.copyLink()">Copy Photo's Link</button>
+<div class="container">
+    <div class="form-group  col-sm-2">
+        <label for="size">Size:</label>
+        <select class="form-control" id="size" ng-model='vm.size' ng-change="vm.onChange(vm.size)" ng-options="size.name for size in vm.availableSizes">
+        </select>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-primary btn-sm" ng-click="vm.showInfo()">Show Info</button>
+        <button class="btn btn-primary btn-sm" ng-click="vm.copyLink()">Copy Photo's Link</button>
+    </div>
+</div>
+<div class="container" ng-show="vm.info">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Author</h3>
+      </div>
+      <div class="panel-body">
+        <p>Username: <strong>{{vm.user.username._content}}</strong></p>
+        <p ng-show="vm.user.realname._content">Real Name: <strong>{{vm.user.realname._content}}</strong></p>
+        <p ng-show="vm.user.location._content">From: <strong>{{vm.user.location._content}}</strong></p>
+        <a ng-href="{{vm.user.profileurl._content}}" target="_blanc">Go to Profile</a>
+        <a ng-href="{{vm.user.photosurl._content}}" target="_blanc">See Photos</a>
+      </div>
+    </div>
 </div>

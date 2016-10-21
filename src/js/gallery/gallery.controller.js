@@ -9,6 +9,7 @@ class GalleryCtrl {
         this.MyConfig = MyConfig;
         this.currIndex = currentPhotoIndex;
         this.fade = false;
+        this.info = false;
         this.currPage = FlickrService.getPhotos().currPage;
         this.currentPhoto = FlickrService.getPhotos().photos[this.currIndex];
         this.availableSizes = FlickrService.getAvailableSizes();
@@ -79,6 +80,14 @@ class GalleryCtrl {
     onChange (size) {
         this.FlickrService.setSize(size);
         this.openPhoto(this.currIndex);
+    }
+    showInfo () {
+        this.FlickrService.getUserInfo(this.currentPhoto.owner)
+            .then(res => {
+                console.log(res);
+                this.info = true;
+                this.user = res;
+            });
     }
 }
 

@@ -18,18 +18,18 @@ export default class FlickrService {
     }
 
     search (request, page = this.MyConfig.one) {
-        console.log(request);
+        // console.log(request);
         const params = {
             'api_key': this.MyConfig.API_KEY,
             'per_page': this.MyConfig.perPage,
             'safe_search': this.MyConfig.one,
             'privacy_filter': this.MyConfig.one,
-            format: 'json',
+            method: this.MyConfig.photos_search,
             nojsoncallback: this.MyConfig.one,
+            format: 'json',
             text: request,
             sort: 'relevance',
-            page,
-            method: 'flickr.photos.search'
+            page
         };
 
         return this.$http({ method: 'GET', url: this.MyConfig.base_url, params })
@@ -42,13 +42,6 @@ export default class FlickrService {
     }
 
     getPhotos () {
-        // if (this.allPhotos.length === 0) {
-        //     this.search(this.$stateParams.search_request, 1)
-        //         .then(() => {
-        //             return { photos: this.allPhotos };
-        //         });
-        //     return;
-        // }
         return {
             photos: this.allPhotos,
             pageNav: this.pageNav,
@@ -61,6 +54,18 @@ export default class FlickrService {
         const src = this.$stateParams;
 
         return `https://farm${src.farm}.static.flickr.com/${src.server}/${src.id}_${src.secret}_${this.size.value}.jpg`;
+    }
+    getUserInfo (id) {
+        const params = {
+            'api_key': this.MyConfig.API_KEY,
+            'user_id': id,
+            'method': this.MyConfig.people_search,
+            'nojsoncallback': this.MyConfig.one,
+            'format': 'json'
+        };
+
+        return this.$http({ method: 'GET', url: this.MyConfig.base_url, params })
+            .then(res => res.data.person);
     }
     getAvailableSizes () {
         return this.availableSizes;

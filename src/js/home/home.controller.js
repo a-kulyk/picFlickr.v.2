@@ -15,12 +15,14 @@ class HomeCtrl {
     }
     search (req, page) {
         this.loading = true;
+        this.showMessage = false;
         this.FlickrService.search(req, page)
             .then(() => {
                 this.loading = false;
                 const result = this.FlickrService.getPhotos();
-                
-console.log(result);
+
+                if (!result.photos.length) this.showMessage = true;
+// console.log(result);
                 Object.assign(this, result);
             });
     }
