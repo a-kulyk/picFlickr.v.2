@@ -9,10 +9,9 @@ export default class FlickrService {
         this.$stateParams = $stateParams;
         this.allPhotos = [];
         this.availableSizes = [
-            {name: 'small', value: 'n', height: '200px'},
+            {name: 'small', value: 'n', height: '250px'},
             {name: 'medium', value: 'z', height: '400px'},
-            {name: 'large', value: 'c', height: '600px'},
-            {name: 'larger', value: 'b', height: '800px'}
+            {name: 'large', value: 'c', height: '600px'}
         ];
         this.size = this.availableSizes[MyConfig.one];
     }
