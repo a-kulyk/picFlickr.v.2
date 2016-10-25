@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-ui-router';
 import 'angular-animate';
+import 'oauthio-web';
 
 import constants from './config/app.constants';
 import appComponent from './app.component';

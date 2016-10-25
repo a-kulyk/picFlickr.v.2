@@ -9,6 +9,7 @@ const MyConfig = {
     'defaultRequest': 'nature',
     'photos_search': 'flickr.photos.search',
     'people_search': 'flickr.people.getInfo',
+    'key': 'access_token',
     'zero': 0,
     'one': 1,
     'three': 3,

@@ -1,13 +1,17 @@
 class AppHeaderCtrl {
-    constructor ($state, MyConfig) {
+    constructor ($state, MyConfig, User) {
         'ngInject';
 
-        this._$state = $state;
+        this.$state = $state;
         this.MyConfig = MyConfig;
+        this.User = User;
         this.appName = MyConfig.appName;
     }
     search (req) {
-        this._$state.go('search', {'search_request': req, 'page': this.MyConfig.one});
+        this.$state.go('search', {'search_request': req, 'page': this.MyConfig.one});
+    }
+    login () {
+        this.User.facebookLogin();
     }
 }
 
